@@ -87,8 +87,8 @@ int startup(){
  rcc_t  *rcc    = (struct rcc_t  *) RCCBASE;
 
  /*Enable PORT C, pin 13*/
- gpio_init(gpio_c, rcc, 13, GPIO_MODE_OUT_50_MHZ, GPIO_CNF_OUT_ALT_PUSH);
- gpio_init(gpio_a, rcc, 2,  GPIO_MODE_OUT_50_MHZ, GPIO_CNF_OUT_ALT_PUSH);
+ gpio_init(gpio_c, rcc, 13, GPIO_MODE_OUT_50_MHZ, GPIO_CNF_OUT_PUSH);
+ gpio_init(gpio_a, rcc, 2,  GPIO_MODE_OUT_50_MHZ, GPIO_CNF_OUT_PUSH);
 
  while(1){
   gpio_out(gpio_c, 13, 1);
