@@ -3,7 +3,7 @@
 
 /*---------------- Setup vector table entries -----------------*/
 
-.word 0x20001000 /*SP*/
+.word 0x20003000 /*SP*/
 .word _reset     /*Reset*/
 .word hang       /*Hard fault*/
 .word hang       /*MM fault*/
@@ -18,7 +18,6 @@
 .word hang       /*Reserved*/
 .word hang       /*Pend SV*/
 .word hang       /*Systick*/
-.word hang
 
 .thumb_func
 hang: b hang

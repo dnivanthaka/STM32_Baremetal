@@ -56,13 +56,6 @@
 #define PLL_ENABLE	0x01000000
 #define FLASH_ACR      ((volatile uint32_t *) 0x40022000)
 
-#define SYSTICKBASE 0xE000E010
-
-#define SYT_COUNTF   (1 << 16)
-#define SYT_SRC      (1 << 2)
-#define SYT_ENABLE   (1)
-
-
 #include "globals.h"
 
 typedef struct rcc_t {
@@ -88,8 +81,7 @@ typedef struct systick_t {
 } systick_t;
 
 void rcc_init(rcc_t *rcc);
-void systick_init(systick_t *syt);
-void delay_ms(systick_t *syt, uint32_t count);
+void delay(uint32_t count);
 void rcc_setup_cpu(rcc_t *rcc, uint32_t pll_clk, uint32_t apb_clk);
 
 #endif

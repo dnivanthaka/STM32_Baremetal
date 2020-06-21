@@ -1,59 +1,69 @@
-typedef unsigned int uint32_t;
+/*
+ Testing the systick timer, this is not the proper way since there is
+ only one systick we could read the values directly
+*/
+
+#include "globals.h"
+#include "rcc.h"
+#include "gpio.h"
+#include "usart.h"
+
+#define SYSTICKBASE 0xE000E010
+
+#define SYT_COUNTF   (1 << 16)
+#define SYT_SRC      (1 << 2)
+#define SYT_ENABLE   (1)
 
 void PUT32(uint32_t, uint32_t);
 unsigned int GET32(uint32_t);
 
-#define GPIOCBASE 0x40011000
-#define RCCBASE   0x40021000
+/*
+ This function would initialize the registers but not activate the counter
+ Counter would be started by the delay function
+*/
+void systick_init(systick_t *syt){
+ //Here the calibration value should be set according the cpu clock, for now its set to 9Mhz
+ syt->ctrl &= ~SYT_ENABLE;
+ syt->ctrl &= ~SYT_COUNTF;
+ syt->ctrl &= ~SYT_SRC;
 
-//Systick timer access
-#define STK_CTRL  0xE000E010
-#define STK_LOAD  STK_CTRL + 0x04
-#define STK_VAL   STK_CTRL + 0x08
-#define STK_CALIB STL_CTRL + 0x0C
+ syt->calib = 0x0002328;        //9Mhz
 
-static int delay(uint32_t count){
-    while(count--){
-         while(1){
-          uint32_t i = GET32(STK_CTRL);
-          if(i && (1 << 16)){
-           PUT32(STK_CTRL, 1);
-           break;
-          }
-         }
-    }
-
-    return 0;
+ syt->load  = 0;
 }
 
-void init(){
- /*Enable PORT C*/
- uint32_t abp2_reg = GET32(RCCBASE + 0x18);
- abp2_reg |= 1 << 4;
- PUT32(RCCBASE + 0x18, abp2_reg);
+void delay_ms(systick_t *syt, uint32_t val){
+ //syt->load = 0xffff - 1;
+ syt->load = 0xfff - 1;
+ syt->val = 0;
+ syt->ctrl &= ~SYT_COUNTF;
+ syt->ctrl |= SYT_ENABLE;
 
- uint32_t crl_reg = GET32(GPIOCBASE + 0x04);
- crl_reg |= 3 << 20;       /*PORTC 13*/
- crl_reg |= 3 << 20;
- PUT32(GPIOCBASE + 0x04, crl_reg);
+ while(val--){
+  while(! (syt->ctrl & SYT_COUNTF));
+ }
 
- //Systick timer init
- PUT32(STK_CTRL, 4);
- PUT32(STK_LOAD,100000000-1);
- PUT32(STK_VAL, 0);
- //Enable timer
- //PUT32(STK_CTRL, 5);
- PUT32(STK_CTRL, 1);
+ //Stop the counter
+ syt->ctrl &= ~SYT_ENABLE;
 }
 
 int startup(){
- init();
+ unsigned char tc;
+ gpio_t *gpio_c = (struct gpio_t *) GPIOCBASE;
+ rcc_t  *rcc    = (struct rcc_t  *) RCCBASE;
+
+ systick_t *syt = (struct systick_t *) SYSTICKBASE;
+
+ rcc_init(rcc);
+ 
+ gpio_init(gpio_c, rcc, 13, GPIO_MODE_OUT_50_MHZ | GPIO_CNF_OUT_PUSH);
+
 
  while(1){
-  PUT32(GPIOCBASE + 0x0f, 1 << (13 + 16));
-  delay(1000);
-  PUT32(GPIOCBASE + 0x10, 1 << 13);
-  delay(1000);
+  gpio_out(gpio_c, 13, 1);
+  delay_ms(syt, 1000);
+  gpio_out(gpio_c, 13, 0);
+  delay_ms(syt, 1000);
  }
 
  return 0;

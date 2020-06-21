@@ -7,8 +7,8 @@ TOOLS = arm-none-eabi
 #AS = $(TOOLS)-gcc
 AS = $(TOOLS)-as
 # Use the -g flag if you intend to use gdb
-#CC = $(TOOLS)-gcc -mcpu=cortex-m3 -mthumb
-CC = $(TOOLS)-gcc -mcpu=cortex-m3 -mthumb -g
+#CC = $(TOOLS)-gcc -mcpu=cortex-m3 -mthumb, added -Os flag to optimize code generation
+CC = $(TOOLS)-gcc -mcpu=cortex-m3 -mthumb -g -Os
 
 #LD = $(TOOLS)-gcc
 LD = $(TOOLS)-ld.bfd
@@ -16,7 +16,7 @@ OBJCOPY = $(TOOLS)-objcopy
 DUMP = $(TOOLS)-objdump -d
 GDB = $(TOOLS)-gdb
 
-OBJS = start.o blink.o
+OBJS = start.o gpio.o rcc.o blink.o
 
 all: blink.bin blink.dump
 
@@ -34,6 +34,12 @@ start.o:	start.s
 
 blink.o:	blink.c
 	$(CC) -c blink.c
+
+gpio.o:	gpio.c
+	$(CC) -c gpio.c
+
+rcc.o:	rcc.c
+	$(CC) -c rcc.c
 
 # To burn the image:
 #  Connect the STLINK gadget to the target.
