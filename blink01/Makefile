@@ -35,21 +35,5 @@ start.o:	start.s
 blink.o:	blink.c
 	$(CC) -c blink.c
 
-# To burn the image:
-#  Connect the STLINK gadget to the target.
-#  Be sure and start openOCD in this directory.
-#    (or else it won't be able to find the bin file).
-#  Then use "make flash" to start an openocd console session.
-#  Type: reset halt
-#  Type: flash write_image erase blink.bin 0x08000000
-flash:
-	@echo "type: flash write_image erase blink.bin 0x08000000"
-	telnet localhost 4444
-gdb:
-	$(GDB) --eval-command="target remote localhost:3333" blink.elf
-
-gdbtui:
-	$(GDB) -tui --eval-command="target remote localhost:3333" blink.elf
-
 clean:
 	rm -f *.o blink.elf blink.bin blink.dump

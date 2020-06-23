@@ -16,24 +16,27 @@ OBJCOPY = $(TOOLS)-objcopy
 DUMP = $(TOOLS)-objdump -d
 GDB = $(TOOLS)-gdb
 
-OBJS = start.o gpio.o rcc.o blink.o
+OBJS = start.o gpio.o rcc.o usart.o spi.o
 
-all: blink.bin blink.dump
+all: spi.bin spi.dump
 
-blink.dump:	blink.elf
-	$(DUMP) blink.elf >blink.dump
+spi.dump:	spi.elf
+	$(DUMP) spi.elf >spi.dump
 
-blink.bin:	blink.elf
-	$(OBJCOPY) blink.elf blink.bin -O binary
+spi.bin:	spi.elf
+	$(OBJCOPY) spi.elf spi.bin -O binary
 
-blink.elf: 	$(OBJS)
-	$(LD) -T blink.lds -o blink.elf $(OBJS)
+spi.elf: 	$(OBJS)
+	$(LD) -T spi.lds -o spi.elf $(OBJS)
 
 start.o:	start.s
 	$(AS) start.s -o start.o
 
-blink.o:	blink.c
-	$(CC) -c blink.c
+spi.o:	spi.c
+	$(CC) -c spi.c
+
+usart.o:	usart.c
+	$(CC) -c usart.c
 
 gpio.o:	gpio.c
 	$(CC) -c gpio.c
@@ -42,4 +45,4 @@ rcc.o:	rcc.c
 	$(CC) -c rcc.c
 
 clean:
-	rm -f *.o blink.elf blink.bin blink.dump
+	rm -f *.o spi.elf spi.bin spi.dump
