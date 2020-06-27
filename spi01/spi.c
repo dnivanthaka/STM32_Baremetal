@@ -116,6 +116,7 @@ int startup(){
     //gpio_init(gpio_a, rcc, 9,  GPIO_MODE_OUT_50_MHZ, GPIO_CNF_OUT_PUSH);
     gpio_init(gpio_a, rcc, 10,  GPIO_MODE_INPUT | GPIO_CNF_IN_FLOAT);
     gpio_init(gpio_c, rcc, 13, GPIO_MODE_OUT_50_MHZ | GPIO_CNF_OUT_PUSH);
+    gpio_init(gpio_c, rcc, 14, GPIO_MODE_OUT_50_MHZ | GPIO_CNF_OUT_PUSH);
     //gpio_init(gpio_a, rcc, 2,  GPIO_MODE_OUT_50_MHZ, GPIO_CNF_OUT_ALT_PUSH);
 
     gpio_init(gpio_a, rcc, 5,  GPIO_MODE_OUT_50_MHZ | GPIO_CNF_OUT_ALT_PUSH);
@@ -145,30 +146,45 @@ int startup(){
     //usart_putchar(usart, '\n');
     //spi_mcp23s17_write(spi1, 0b01000000, 0x00, 0x00);
     gpio_out(gpio_c, 13, 1);
+    gpio_out(gpio_c, 14, 1);
+    //spi_write(spi1, 0);
+    //spi_read(spi1);
+    //gpio_out(gpio_c, 13, 0);
     while(1){
         //gpio_out(gpio_c, 13, 1);
-        gpio_out(gpio_c, 13, 0);
+        //gpio_out(gpio_c, 13, 0);
         //spi_mcp23s17_write(spi1, 0b01000000, 0x12, 0xff);
         //spi_write(spi1, 0b01000001);
-        spi_write(spi1, 0xff);
-        spi_read(spi1);
+        //spi_write(spi1, 0xff);
+        //spi_read(spi1);
         //spi_write(spi1, 0x00);
         //uint8_t val = spi_read(spi1);
-        gpio_out(gpio_c, 13, 1);
+        //gpio_out(gpio_c, 13, 1);
         //if(val != 0b01000001)
         //    continue;
         //usart_putchar(usart, val);
         //usart_putchar(usart, '\r');
         //usart_putchar(usart, '\n');
-        delay_ms(syt, 1000);
-        gpio_out(gpio_c, 13, 0);
-        spi_write(spi1, 0);
-        spi_read(spi1);
+        //delay_ms(syt, 1000);
+        //gpio_out(gpio_c, 13, 0);
+        //spi_write(spi1, 0);
+        //spi_read(spi1);
         //val = spi_read(spi1);
         //gpio_out(gpio_c, 13, 0);
-        gpio_out(gpio_c, 13, 1);
+        //gpio_out(gpio_c, 13, 1);
         //spi_mcp23s17_write(spi1, 0b01000000, 0x12, 0x00);
-        delay_ms(syt, 1000);
+        //delay_ms(syt, 1000);
+        for(uint8_t i = 0; i < 16; i++){
+            gpio_out(gpio_c, 13, 0);
+            spi_write(spi1, (i + 1));
+            //spi_read(spi1);
+            gpio_out(gpio_c, 13, 1);
+
+            gpio_out(gpio_c, 14, 0); // Toggle Latch port
+            gpio_out(gpio_c, 14, 1);
+            
+            delay_ms(syt, 1000);
+        }
     }
 
  return 0;

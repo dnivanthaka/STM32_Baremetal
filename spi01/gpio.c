@@ -25,6 +25,6 @@ void gpio_init(gpio_t *gpio, rcc_t *rcc, uint8_t pin, uint8_t mode){
 void gpio_out(gpio_t *gpio, uint8_t pin, uint8_t value){
  uint8_t reg_val = 0;
 
- if(value == 0) reg_val = 16;
+ if(value > 0) reg_val = 16;
  gpio->bsrr = 1 << (pin + reg_val);
 }
