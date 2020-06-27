@@ -1,3 +1,6 @@
+/**
+ * Sends serial data to a 595 shift register
+ */
 #include "globals.h"
 #include "rcc.h"
 #include "gpio.h"
@@ -97,7 +100,6 @@ void spi_mcp23s17_write(spi_t *spi, uint8_t addr, uint8_t reg, uint8_t val){
 }
 
 int startup(){
-    unsigned char tc;
     uint16_t mcp_data = 0;
     gpio_t *gpio_c = (struct gpio_t *) GPIOCBASE;
     gpio_t *gpio_a = (struct gpio_t *) GPIOABASE;
@@ -140,40 +142,10 @@ int startup(){
     spi_init(spi1, SPI_MASTER, SPI_MODE_UNI2 | SPI_OUTPUT_ENABLE, 
             SPI_DFF_8BIT, SPI_CLK_DIV8, SPI_CPOL_1, SPI_CPHA_1, SPI_SLAVE_MGMT_DISABLE);
 
-
-    //usart_putchar(usart, (spi1->cr1 & 0xff));
-    //usart_putchar(usart, ((spi1->cr1 >> 4 ) & 0xff));
-    //usart_putchar(usart, '\n');
-    //spi_mcp23s17_write(spi1, 0b01000000, 0x00, 0x00);
     gpio_out(gpio_c, 13, 1);
     gpio_out(gpio_c, 14, 1);
-    //spi_write(spi1, 0);
-    //spi_read(spi1);
-    //gpio_out(gpio_c, 13, 0);
+
     while(1){
-        //gpio_out(gpio_c, 13, 1);
-        //gpio_out(gpio_c, 13, 0);
-        //spi_mcp23s17_write(spi1, 0b01000000, 0x12, 0xff);
-        //spi_write(spi1, 0b01000001);
-        //spi_write(spi1, 0xff);
-        //spi_read(spi1);
-        //spi_write(spi1, 0x00);
-        //uint8_t val = spi_read(spi1);
-        //gpio_out(gpio_c, 13, 1);
-        //if(val != 0b01000001)
-        //    continue;
-        //usart_putchar(usart, val);
-        //usart_putchar(usart, '\r');
-        //usart_putchar(usart, '\n');
-        //delay_ms(syt, 1000);
-        //gpio_out(gpio_c, 13, 0);
-        //spi_write(spi1, 0);
-        //spi_read(spi1);
-        //val = spi_read(spi1);
-        //gpio_out(gpio_c, 13, 0);
-        //gpio_out(gpio_c, 13, 1);
-        //spi_mcp23s17_write(spi1, 0b01000000, 0x12, 0x00);
-        //delay_ms(syt, 1000);
         for(uint8_t i = 0; i < 16; i++){
             gpio_out(gpio_c, 13, 0);
             gpio_out(gpio_c, 14, 0);
