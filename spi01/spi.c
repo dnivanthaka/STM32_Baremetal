@@ -176,11 +176,11 @@ int startup(){
         //delay_ms(syt, 1000);
         for(uint8_t i = 0; i < 16; i++){
             gpio_out(gpio_c, 13, 0);
+            gpio_out(gpio_c, 14, 0);
             spi_write(spi1, (i + 1));
-            //spi_read(spi1);
+            spi_read(spi1);
             gpio_out(gpio_c, 13, 1);
 
-            gpio_out(gpio_c, 14, 0); // Toggle Latch port
             gpio_out(gpio_c, 14, 1);
             
             delay_ms(syt, 1000);
