@@ -70,7 +70,7 @@ typedef struct rcc_t {
     volatile uint32_t cfgr;
     volatile uint32_t cir;
     volatile uint32_t apb2rstr;
-    volatile uint32_t abp1rstr;
+    volatile uint32_t apb1rstr;
     volatile uint32_t ahbenr;
     volatile uint32_t apb2enr;
     volatile uint32_t apb1enr;

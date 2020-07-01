@@ -37,7 +37,8 @@ void usart_init(usart_t *usart);
 void usart_putchar(usart_t *usart, uint8_t ch);
 uint8_t usart_getchar(usart_t *usart);
 void usart_puts(usart_t *usart, uint8_t *str);
-
+void usart_hex2ascii8(usart_t *usart, uint8_t val);
+void usart_hex2ascii32(usart_t *usart, uint32_t val);
 
 #endif
 
